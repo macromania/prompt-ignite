@@ -1,14 +1,34 @@
-# Project
+# Prompt Ignite Framework
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+## Overview
 
-As the maintainer of this project, please make a few updates:
+This framework facilitates the creation of experiments leveraging [Prompt Flow](https://github.com/microsoft/promptflow), Python, and Jupyter Notebooks. It is designed to streamline the process of testing hypotheses and analyzing results for engineers and data scientists in the field of AI.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+## Features
+
+- **Issue Tracking**: Each experiment is assigned a unique issue number for easy tracking and reference.
+- **Template Types**: Every experiment can be initiated with one of three templates:
+  1. Prompt flow with a simple prompt for Large Language Models (LLM).
+  2. Prompt flow with a simple Python tool.
+  3. Prompt flow with pre-processing in Python, prompt with LLM, and post-processing with Python.
+- **Experiment Artifact**: Includes a `README.md` for detailing hypotheses, findings, and prompts used during the experiment.
+- **Variants and Runners**: Each experiment comes with 2 variants and its runners, along with a runner notebook to facilitate different testing scenarios.
+
+## Getting Started
+
+TBC
+
+## Experiment Structure
+
+Each experiment folder is structured as follows:
+
+- `issue-<issue_number>-<name>/`: The main directory for the experiment.
+  - `README.md`: Details the experiment's hypothesis, findings, and prompts.
+  - `flow.dag.yaml`: Contains the Prompt Flow flow.
+  - `run.yaml`: Contains the default variant runner of the experiment.
+  - `run-1.yaml`: Contains the first variant runner of the experiment.
+  - `runner.ipynb`: The Jupyter Notebook for the second runner.
+  - `data.jsonl`: The data file for the experiment.
 
 ## Contributing
 
