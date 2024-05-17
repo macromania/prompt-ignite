@@ -18,6 +18,14 @@ This framework facilitates the creation of experiments leveraging [Prompt Flow](
 
 Work in progres...
 
+### Local Development
+
+Run the following commands to set up the project locally:
+
+```bash
+make setup-local
+```
+
 ## Experiment Structure
 
 Each experiment folder is structured as follows:
