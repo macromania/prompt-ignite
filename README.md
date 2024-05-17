@@ -16,7 +16,7 @@ This framework facilitates the creation of experiments leveraging [Prompt Flow](
 
 ## Getting Started
 
-TBC
+Work in progres...
 
 ## Experiment Structure
 
