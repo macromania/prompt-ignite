@@ -1,0 +1,36 @@
+{
+  "name": "Prompt Ignite",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/poetry:2": {
+      "version": "1.8.3"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.vscode-github-actions",
+        "ms-azuretools.vscode-bicep",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "ms-toolsai.jupyter",
+        "DavidAnson.vscode-markdownlint",
+        "ms-python.vscode-pylance",
+        "njpwerner.autodocstring",
+        "mhutchie.git-graph",
+        "ms-python.isort",
+        "magicstack.MagicPython",
+        "prompt-flow.prompt-flow",
+        "ms-python.debugpy",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  },
+  "containerEnv": {
+    "PYTHONPATH": "."
+  },
+  "forwardPorts": [],
+  "postCreateCommand": ".devcontainer/postCreateCommand.sh",
+  "remoteUser": "vscode"
+}
