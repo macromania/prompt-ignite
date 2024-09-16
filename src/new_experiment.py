@@ -1,7 +1,8 @@
 import os
-import subprocess
 import re
 import shutil
+import subprocess
+
 
 class NewExperiment:
     """Creates a new experiment.
@@ -20,17 +21,16 @@ class NewExperiment:
             raise RuntimeError(f'Error executing command: {command}')
         return process.returncode
 
-
     def _check_and_connect_virtual_env(self):
         print("🔍 Checking if the virtual environment is active...")
         if 'VIRTUAL_ENV' not in os.environ:
             print("Not in a virtual environment. Connecting to it...")
             self._run_command('source .venv/bin/activate')
-            
+
             print("✅ Connected to the virtual environment!")
         else:
-            print(f"✅ Already connected to a virtual environment: {os.environ['VIRTUAL_ENV']}")
-
+            print(
+                f"✅ Already connected to a virtual environment: {os.environ['VIRTUAL_ENV']}")
 
     def _read_and_set_env_vars(self):
         print("🔍 Reading .env file...")
@@ -45,7 +45,7 @@ class NewExperiment:
             """)
             return
 
-        with open('.env', 'r') as file:
+        with open('.env') as file:
             lines = file.readlines()
             for line in lines:
                 if not line.startswith('#'):
@@ -55,16 +55,18 @@ class NewExperiment:
 
     def _create_prompt_flow_connection(self, name):
         print("🛠️ Creating the Prompt Flow Connection...")
-        self._run_command(f'pf connection create -f ./src/connections/azure_openai.yaml --set api_key="$AZURE_OPENAPI_KEY" api_base="$AZURE_OPENAPI_ENDPOINT" api_version="$AZURE_OPENAPI_VERSION" --name {name}-connection')
-        
+        self._run_command(
+            f'pf connection create -f ./src/connections/azure_openai.yaml --set api_key="$AZURE_OPENAPI_KEY" api_base="$AZURE_OPENAPI_ENDPOINT" api_version="$AZURE_OPENAPI_VERSION" --name {name}-connection')
+
         print("✅ Connection created!")
 
-    def _create_experiment_doc(self,name):
+    def _create_experiment_doc(self, name):
         print("🛠️ Creating experiment doc")
-        
-        shutil.copyfile('./src/artefacts/TEMPLATE-README.md', f"./app/flow/{name}/README.md")
-        
-        with open(f"./app/flow/{name}/README.md", 'r') as file:
+
+        shutil.copyfile('./src/artefacts/TEMPLATE-README.md',
+                        f"./app/flow/{name}/README.md")
+
+        with open(f"./app/flow/{name}/README.md") as file:
             filedata = file.read()
 
         # Replace the target string
@@ -73,13 +75,14 @@ class NewExperiment:
         # Write the file out again
         with open(f"./app/flow/{name}/README.md", 'w') as file:
             file.write(filedata)
-            
+
         print("✅ Experiment doc created!")
 
     def _get_experiment_name(self):
         name = input("🤖 Enter the name of the experiment: ")
         while not re.match(r'^issue-[0-9]+-[a-z0-9-]+$', name):
-            print("Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
+            print(
+                "Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
             name = input("🤖 Enter the name of the experiment: ")
         return name
 
@@ -89,9 +92,10 @@ class NewExperiment:
         os.makedirs('./app/flow', exist_ok=True)
 
     def _create_experiment_flow(self, name):
-        #TODO: Ask which template to create the experiment from
+        # TODO: Ask which template to create the experiment from
         print("🛠️ Creating the experiment flow...")
-        self._run_command(f'pf flow init --flow "./app/flow/{name}" --type standard')
+        self._run_command(
+            f'pf flow init --flow "./app/flow/{name}" --type standard')
 
     def create(self):
         print("🔥 Welcome to the Prompt Ignite!")
@@ -107,6 +111,7 @@ class NewExperiment:
         self._create_experiment_doc(name)
 
         print("🔥 Experiment setup complete! 🚀")
+
 
 if __name__ == "__main__":
     NewExperiment().create()
