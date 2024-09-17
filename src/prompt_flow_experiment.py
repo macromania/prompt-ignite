@@ -32,7 +32,7 @@ class PromptFlowExperiment(Experiment):
     def _run_command(self, command):
         env = os.environ.copy()
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-        stdout, stderr = process.communicate()
+        stdout, stderr = process.communicate(timeout=30)
         if process.returncode != 0:
             raise RuntimeError(f'Error executing command: {command}')
         return process.returncode
