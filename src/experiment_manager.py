@@ -72,7 +72,7 @@ class ExperimentManager:
         name = input("🤖 Enter the name of the experiment: ")
         while not re.match(r'^issue-[0-9]+-[a-z0-9-]+$', name):
             print(
-                "Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
+                "🚨 Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
             name = input("🤖 Enter the name of the experiment: ")
         return name
 
@@ -89,10 +89,10 @@ class ExperimentManager:
         for key, value in types.items():
             print(f"{key}. {value.value}")
 
-        choice = input("Enter the number of your choice: ")
+        choice = input("🔢 Enter the number of your choice: ")
         while choice not in types:
-            print("Invalid choice. Please enter a number corresponding to one of the options.")
-            choice = input("Enter the number of your choice: ")
+            print("🚨 Invalid choice. Please enter a number corresponding to one of the options.")
+            choice = input("🔢 Enter the number of your choice: ")
 
         return types[choice]
 
