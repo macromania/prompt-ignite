@@ -3,7 +3,7 @@ import subprocess
 import pytest
 import unittest
 from unittest.mock import patch, MagicMock
-from src.new_experiment import NewExperiment
+from src.experiment_manager import NewExperiment
 
 class TestNewExperiment:
     @pytest.fixture
