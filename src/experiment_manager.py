@@ -56,7 +56,6 @@ class ExperimentManager:
                 try:
                     varname, value = line.strip().split('=', 1)
                     os.environ[varname] = value
-                    print(f"🛠️ Set environment variable: {varname}")
                 except ValueError:
                     print(f"Error parsing line: {line.strip()}")
 
