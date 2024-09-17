@@ -16,13 +16,13 @@ jobs:
         # Use multiple Python versions as a matrix in the job.
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
         # Use Poetry version number in the cache key and the "-0" suffix to invalidate the cache manually
       - name: Cache Poetry Install
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.local
           key: poetry-1.8.3-0
@@ -38,7 +38,7 @@ jobs:
         # Cache the dependencies
       - name: Cache Dependencies
         id: cache-deps
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: .venv
           key: pydeps-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
