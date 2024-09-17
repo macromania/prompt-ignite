@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from src.experiment_manager import NewExperiment
 
-class TestNewExperiment:
+class TestExperimentManager:
     @pytest.fixture
     def new_experiment(self):
         return NewExperiment()
