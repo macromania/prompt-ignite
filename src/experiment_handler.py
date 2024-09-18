@@ -1,9 +1,13 @@
 import os
 import re
-import shutil
 import subprocess
 from abc import ABC, abstractmethod
 from enum import Enum
+
+from src.experiments.jupytor_notebook import JupyterNotebookExperiment
+from src.experiments.prompty import PromptyExperiment
+from src.experiments.prompt_flow import PromptFlowExperiment
+from src.experiments.pure_python import PythonExperiment
 
 
 class ExperimentType(Enum):
@@ -11,67 +15,6 @@ class ExperimentType(Enum):
     JUPYTER_NOTEBOOK = 'Hello Jupyter Notebook'
     PROMPTY = 'Hello Prompty'
     PYTHON = 'Hello Python'
-
-
-class Experiment(ABC):
-    def __init__(self, name):
-        self.name = name
-
-    @abstractmethod
-    def create(self):
-        pass
-
-
-class PromptFlowExperiment(Experiment):
-    def create(self):
-        self.create_resources()
-        self.create_documentation()
-
-    def create_resources(self):
-        print("🛠️ Creating the Prompt Flow...")
-        command = f'pf flow init --flow "./app/flow/{self.name}" --type standard'
-        self._run_command(command)
-        print("✅ Prompt Flow created!")
-
-    def create_documentation(self):
-        print("🛠️ Creating experiment doc")
-
-        shutil.copyfile('./src/artefacts/TEMPLATE-README.md', f"./app/flow/{self.name}/README.md")
-
-        with open(f"./app/flow/{self.name}/README.md") as file:
-            filedata = file.read()
-
-        # Replace the target string
-        filedata = filedata.replace('{{name}}', self.name)
-
-        # Write the file out again
-        with open(f"./app/flow/{self.name}/README.md", 'w') as file:
-            file.write(filedata)
-
-        print("✅ Experiment doc created!")
-
-    def _run_command(self, command):
-        env = os.environ.copy()
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-        stdout, stderr = process.communicate(timeout=30)
-        if process.returncode != 0:
-            raise RuntimeError(f'Error executing command: {command}')
-        return process.returncode
-
-
-class JupyterNotebookExperiment(Experiment):
-    def create(self):
-        raise NotImplementedError("Jupyter Notebook experiment not implemented yet.")
-
-
-class PromptyExperiment(Experiment):
-    def create(self):
-        raise NotImplementedError("Prompty experiment not implemented yet.")
-
-
-class PythonExperiment(Experiment):
-    def create(self):
-        raise NotImplementedError("Python experiment not implemented yet.")
 
 
 class ExperimentHandler:
