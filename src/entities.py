@@ -7,7 +7,7 @@ class Experiment(ABC):
         self.name = name
 
     @abstractmethod
-    def create(self):
+    def create(self, dir):
         pass
 
 class ExperimentType(Enum):

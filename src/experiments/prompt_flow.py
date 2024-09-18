@@ -6,29 +6,29 @@ from src.entities import Experiment
 
 
 class PromptFlowExperiment(Experiment):
-    def create(self):
-        self.create_resources()
-        self.create_documentation()
+    def create(self, dir):
+        self.create_resources(dir)
+        self.create_documentation(dir)
 
-    def create_resources(self):
+    def create_resources(self, dir: str):
         print("🛠️ Creating the Prompt Flow...")
-        command = f'pf flow init --flow "./app/flow/{self.name}" --type standard'
+        command = f'pf flow init --flow "./{dir}/{self.name}" --type standard'
         self._run_command(command)
         print("✅ Prompt Flow created!")
 
-    def create_documentation(self):
+    def create_documentation(self, dir: str):
         print("🛠️ Creating experiment doc")
 
-        shutil.copyfile('./src/artefacts/TEMPLATE-README.md', f"./app/flow/{self.name}/README.md")
+        shutil.copyfile('./src/artefacts/TEMPLATE-README.md', f"{dir}{self.name}/README.md")
 
-        with open(f"./app/flow/{self.name}/README.md") as file:
+        with open(f"{dir}{self.name}/README.md") as file:
             filedata = file.read()
 
         # Replace the target string
         filedata = filedata.replace('{{name}}', self.name)
 
         # Write the file out again
-        with open(f"./app/flow/{self.name}/README.md", 'w') as file:
+        with open(f"{dir}{self.name}/README.md", 'w') as file:
             file.write(filedata)
 
         print("✅ Experiment doc created!")

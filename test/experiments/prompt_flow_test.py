@@ -11,7 +11,7 @@ class TestPromptFlowExperiment:
         experiment = PromptFlowExperiment("test-experiment")    
         mock_run_command.return_value = 0
 
-        experiment.create_resources()
+        experiment.create_resources("app/flow")
 
         expected_command = f'pf flow init --flow "./app/flow/{experiment.name}" --type standard'
         mock_run_command.assert_called_once_with(expected_command)
@@ -20,7 +20,7 @@ class TestPromptFlowExperiment:
     @patch('builtins.open', new_callable=unittest.mock.mock_open, read_data="This is a template for {{name}}")
     def test_create_documentation(self, mock_open, mock_copyfile):  # noqa: F811
         experiment = PromptFlowExperiment("test-experiment")    
-        experiment.create_documentation()
+        experiment.create_documentation("./app/flow/")
 
         mock_copyfile.assert_called_once_with('./src/artefacts/TEMPLATE-README.md', f"./app/flow/{experiment.name}/README.md")
 
