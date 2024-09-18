@@ -8,7 +8,7 @@ from src.prompt_flow_experiment import PromptFlowExperiment
 
 class ExperimentFactory:
     @staticmethod
-    def create_experiment(experiment_type, name):
+    def initiate_experiment(experiment_type, name):
         if experiment_type == ExperimentType.PROMPT_FLOW:
             return PromptFlowExperiment(name)
         elif experiment_type == ExperimentType.JUPYTER_NOTEBOOK:
@@ -102,9 +102,8 @@ class ExperimentManager:
             name = self._get_experiment_name()
             experiment_type = self._get_experiment_type()
 
-            experiment = ExperimentFactory.create_experiment(experiment_type, name)
-            experiment.create_resources()
-            experiment.create_documentation()
+            experiment = ExperimentFactory.initiate_experiment(experiment_type, name)
+            experiment.create()
             print("🔥 Experiment setup complete! 🚀")
 
         except NotImplementedError:

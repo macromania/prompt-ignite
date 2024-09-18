@@ -12,21 +12,21 @@ class TestExperimentFactory:
     def experiment_factory(self):
         return ExperimentFactory()
 
-    def test_create_prompt_flow_experiment(self, experiment_factory):
-        experiment = experiment_factory.create_experiment(ExperimentType.PROMPT_FLOW, 'issue-123-name')
+    def test_initiate_prompt_flow_experiment(self, experiment_factory):
+        experiment = experiment_factory.initiate_experiment(ExperimentType.PROMPT_FLOW, 'issue-123-name')
         assert isinstance(experiment, PromptFlowExperiment)
     
-    def test_create_jupyter_notebook_experiment(self, experiment_factory):
+    def test_initiate_jupyter_notebook_experiment(self, experiment_factory):
         with pytest.raises(NotImplementedError):
-            experiment_factory.create_experiment(ExperimentType.JUPYTER_NOTEBOOK, 'issue-123-name')
+            experiment_factory.initiate_experiment(ExperimentType.JUPYTER_NOTEBOOK, 'issue-123-name')
 
-    def test_create_prompty_experiment(self, experiment_factory):
+    def test_initiate_prompty_experiment(self, experiment_factory):
         with pytest.raises(NotImplementedError):
-            experiment_factory.create_experiment(ExperimentType.PROMPTY, 'issue-123-name')
+            experiment_factory.initiate_experiment(ExperimentType.PROMPTY, 'issue-123-name')
 
-    def test_create_python_experiment(self, experiment_factory):
+    def test_initiate_python_experiment(self, experiment_factory):
         with pytest.raises(NotImplementedError):
-            experiment_factory.create_experiment(ExperimentType.PYTHON, 'issue-123-name')
+            experiment_factory.initiate_experiment(ExperimentType.PYTHON, 'issue-123-name')
 
 
 class TestExperimentManager:

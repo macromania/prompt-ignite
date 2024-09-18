@@ -6,6 +6,10 @@ from src.experiment import Experiment
 
 
 class PromptFlowExperiment(Experiment):
+    def create(self):
+        self.create_resources()
+        self.create_documentation()
+
     def create_resources(self):
         print("🛠️ Creating the Prompt Flow...")
         command = f'pf flow init --flow "./app/flow/{self.name}" --type standard'

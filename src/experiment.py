@@ -14,9 +14,5 @@ class Experiment(ABC):
         self.name = name
 
     @abstractmethod
-    def create_resources(self):
-        pass
-
-    @abstractmethod
-    def create_documentation(self):
+    def create(self):
         pass

@@ -13,6 +13,16 @@ class TestPromptFlowExperiment:
     def experiment(self, mock_run_command):
         mock_run_command.return_value = 0 
         return PromptFlowExperiment(name="test-experiment")
+    
+    @patch.object(PromptFlowExperiment, '_run_command')
+    @patch.object(PromptFlowExperiment, 'create_documentation')
+    def test_create(self, mock_create_documentation, mock_run_command):
+        experiment = PromptFlowExperiment("test-experiment")
+        
+        experiment.create()
+
+        mock_run_command.assert_called_once_with('pf flow init --flow "./app/flow/test-experiment" --type standard')
+        mock_create_documentation.assert_called_once()
 
     @patch('subprocess.Popen')
     def test_run_command(self, mock_popen, experiment):
