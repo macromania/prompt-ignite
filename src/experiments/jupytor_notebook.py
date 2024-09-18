@@ -1,4 +1,4 @@
-from src.experiments.base_experiment import Experiment
+from src.entities import Experiment
 
 
 class JupyterNotebookExperiment(Experiment):

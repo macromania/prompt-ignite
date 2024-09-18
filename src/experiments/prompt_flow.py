@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 
-from src.experiments.base_experiment import Experiment
+from src.entities import Experiment
 
 
 class PromptFlowExperiment(Experiment):

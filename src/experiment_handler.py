@@ -3,17 +3,11 @@ import re
 import subprocess
 from enum import Enum
 
+from src.entities import ExperimentType
 from src.experiments.jupytor_notebook import JupyterNotebookExperiment
 from src.experiments.prompt_flow import PromptFlowExperiment
 from src.experiments.prompty import PromptyExperiment
 from src.experiments.pure_python import PythonExperiment
-
-
-class ExperimentType(Enum):
-    PROMPT_FLOW = "Hello Prompt Flow"
-    JUPYTER_NOTEBOOK = "Hello Jupyter Notebook"
-    PROMPTY = "Hello Prompty"
-    PYTHON = "Hello Python"
 
 
 class ExperimentHandler:
