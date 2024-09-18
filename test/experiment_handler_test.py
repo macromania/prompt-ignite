@@ -9,6 +9,7 @@ from src.experiment_handler import ExperimentHandler, PromptFlowExperiment
 
 class TestExperimentHandler:
     @patch('src.experiment_handler.ExperimentHandler._run_command')
+    @patch.dict(os.environ, {}, clear=True)
     def test_check_and_connect_virtual_env_not_connected(self, mock_run_command):
         ExperimentHandler()
         mock_run_command.assert_called_once_with('source .venv/bin/activate')
