@@ -1,27 +1,87 @@
 import os
 import re
+import shutil
 import subprocess
-
-from src.experiment import ExperimentType
-from src.prompt_flow_experiment import PromptFlowExperiment
-
-
-class ExperimentFactory:
-    @staticmethod
-    def initiate_experiment(experiment_type, name):
-        if experiment_type == ExperimentType.PROMPT_FLOW:
-            return PromptFlowExperiment(name)
-        elif experiment_type == ExperimentType.JUPYTER_NOTEBOOK:
-            raise NotImplementedError("Jupyter Notebook experiment not implemented yet.")
-        elif experiment_type == ExperimentType.PROMPTY:
-            raise NotImplementedError("Prompty experiment not implemented yet.")
-        elif experiment_type == ExperimentType.PYTHON:
-            raise NotImplementedError("Python experiment not implemented yet.")
-        else:
-            raise ValueError(f"Unsupported experiment type: {experiment_type}")
+from abc import ABC, abstractmethod
+from enum import Enum
 
 
-class ExperimentManager:
+class ExperimentType(Enum):
+    PROMPT_FLOW = 'Hello Prompt Flow'
+    JUPYTER_NOTEBOOK = 'Hello Jupyter Notebook'
+    PROMPTY = 'Hello Prompty'
+    PYTHON = 'Hello Python'
+
+
+class Experiment(ABC):
+    def __init__(self, name):
+        self.name = name
+
+    @abstractmethod
+    def create(self):
+        pass
+
+
+class PromptFlowExperiment(Experiment):
+    def create(self):
+        self.create_resources()
+        self.create_documentation()
+
+    def create_resources(self):
+        print("🛠️ Creating the Prompt Flow...")
+        command = f'pf flow init --flow "./app/flow/{self.name}" --type standard'
+        self._run_command(command)
+        print("✅ Prompt Flow created!")
+
+    def create_documentation(self):
+        print("🛠️ Creating experiment doc")
+
+        shutil.copyfile('./src/artefacts/TEMPLATE-README.md', f"./app/flow/{self.name}/README.md")
+
+        with open(f"./app/flow/{self.name}/README.md") as file:
+            filedata = file.read()
+
+        # Replace the target string
+        filedata = filedata.replace('{{name}}', self.name)
+
+        # Write the file out again
+        with open(f"./app/flow/{self.name}/README.md", 'w') as file:
+            file.write(filedata)
+
+        print("✅ Experiment doc created!")
+
+    def _run_command(self, command):
+        env = os.environ.copy()
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+        stdout, stderr = process.communicate(timeout=30)
+        if process.returncode != 0:
+            raise RuntimeError(f'Error executing command: {command}')
+        return process.returncode
+
+
+class JupyterNotebookExperiment(Experiment):
+    def create(self):
+        raise NotImplementedError("Jupyter Notebook experiment not implemented yet.")
+
+
+class PromptyExperiment(Experiment):
+    def create(self):
+        raise NotImplementedError("Prompty experiment not implemented yet.")
+
+
+class PythonExperiment(Experiment):
+    def create(self):
+        raise NotImplementedError("Python experiment not implemented yet.")
+
+
+class ExperimentHandler:
+    _experiments = {
+        ExperimentType.PROMPT_FLOW: PromptFlowExperiment,
+        ExperimentType.JUPYTER_NOTEBOOK: JupyterNotebookExperiment,
+        ExperimentType.PROMPTY: PromptyExperiment,
+        ExperimentType.PYTHON: PythonExperiment,
+    }
+
     def __init__(self):
         self._check_and_connect_virtual_env()
         self._read_and_set_env_vars()
@@ -67,7 +127,8 @@ class ExperimentManager:
             raise RuntimeError(f'Error executing experiment command: {command}')
         return process.returncode
 
-    def _get_experiment_name(self):
+    @staticmethod
+    def _get_experiment_name():
         name = input("🤖 Enter the name of the experiment: ")
         while not re.match(r'^issue-[0-9]+-[a-z0-9-]+$', name):
             print(
@@ -75,7 +136,8 @@ class ExperimentManager:
             name = input("🤖 Enter the name of the experiment: ")
         return name
 
-    def _get_experiment_type(self):
+    @staticmethod
+    def _get_experiment_type():
         """Prompts the user to choose a type for the experiment."""
         types = {
             '1': ExperimentType.PROMPT_FLOW,
@@ -95,24 +157,29 @@ class ExperimentManager:
 
         return types[choice]
 
-    def create(self):
+
+    @classmethod
+    def create(cls):
         try:
             print("🔥 Welcome to the Prompt Ignite!")
 
-            name = self._get_experiment_name()
-            experiment_type = self._get_experiment_type()
+            name = cls._get_experiment_name()
+            experiment_type = cls._get_experiment_type()
 
-            experiment = ExperimentFactory.initiate_experiment(experiment_type, name)
+            if experiment_type not in cls._experiments:
+                raise ValueError(f"Unsupported experiment type: {experiment_type}")
+
+            experiment = cls._experiments[experiment_type](name)
             experiment.create()
+
             print("🔥 Experiment setup complete! 🚀")
 
         except NotImplementedError:
             print("🛠️ This setup is not implemented yet!")
             return
         except Exception as e:
-            print(f"❌ Oops! Something went went wrong. {e}")
+            print(f"❌ Oops! Something went wrong. {e}")
             return
 
-
 if __name__ == "__main__":
-    ExperimentManager().create()
+    ExperimentHandler.create()
