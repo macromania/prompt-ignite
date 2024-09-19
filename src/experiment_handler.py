@@ -89,7 +89,7 @@ class ExperimentHandler:
 
     @staticmethod
     def _get_experiment_dir():
-        """Prompt the user to provide a custom directory (relative or absolute) or use the default."""
+        """Prompt the user to provide a custom directory or use the default."""
         user_input = input(f"📁 [Optional] Enter directory for experiment (default: {DEFAULT_EXPERIMENT_DIR}) : ").strip()
 
         # Use default if no input

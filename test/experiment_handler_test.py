@@ -31,8 +31,7 @@ class TestExperimentHandler:
     @patch('src.experiments.prompt_flow.PromptFlowExperiment.create_documentation')
     @patch('src.experiments.prompt_flow.PromptFlowExperiment.create_resources')
     def test_create(self, mock_create_documentation, mock_create_resources):
-        dir = "./mydir/"
-        experiment = PromptFlowExperiment("test-experiment", dir)
+        experiment = PromptFlowExperiment("test-experiment", "./mydir/")
 
         experiment.create()
         
@@ -72,7 +71,7 @@ class TestExperimentHandler:
     @patch('builtins.input', return_value='mydir')  # Simulate user input without './' and without '/'
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
-    def test_get_experiment_dir_custom_relative(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+    def test_get_experiment_dir(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
         experiment = ExperimentHandler()
 
         
@@ -83,10 +82,10 @@ class TestExperimentHandler:
         assert result == expected_directory
 
     @patch.object(ExperimentHandler, '_run_command')
-    @patch('builtins.input', return_value='./mydir')  # Simulate user input with './' but without '/'
+    @patch('builtins.input', return_value='./mydir/')  # Simulate user input with './' but without '/'
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
-    def test_get_experiment_dir_custom_relative_with_dot_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+    def test_get_experiment_dir_with_dot_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
         experiment = ExperimentHandler()
 
         
@@ -100,7 +99,7 @@ class TestExperimentHandler:
     @patch('builtins.input', return_value='mydir/')  # Simulate user input with './' but without '/'
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
-    def test_get_experiment_dir_custom_relative_without_preceding_dot_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+    def test_get_experiment_dir_without_preceding_dot_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
         experiment = ExperimentHandler()
 
         
@@ -114,7 +113,7 @@ class TestExperimentHandler:
     @patch('builtins.input', return_value='./mydir')  # Simulate user input with './' but without '/'
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
-    def test_get_experiment_dir_custom_relative_without_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+    def test_get_experiment_dir_without_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
         experiment = ExperimentHandler()
 
         
@@ -128,7 +127,7 @@ class TestExperimentHandler:
     @patch('builtins.input', return_value='mydir/temp')  # Simulate user input with './' but without '/'
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
-    def test_get_experiment_dir_custom_relative_without_preceding_dot_and_slash_and_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+    def test_get_experiment_dir_without_preceding_dot_and_slash_and_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
         experiment = ExperimentHandler()
 
         
