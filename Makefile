@@ -13,3 +13,9 @@ setup-local-env: ## 🐍 Create a virtual environment and install dependencies
 
 run-unit-tests: ## 🧪 Run unit tests
 	@sh ./scripts/run-unit-tests.sh
+
+run: ## 🚀 Run the application
+	@sh ./scripts/run.sh $(ARGS)
+
+run-help: ## 🚀 Run the application with help
+	@sh ./scripts/run-help.sh
