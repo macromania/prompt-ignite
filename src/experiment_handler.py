@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 
+from config import DEFAULT_EXPERIMENT_DIR
 from src.entities import ExperimentType
 from src.experiments.jupytor_notebook import JupyterNotebookExperiment
 from src.experiments.prompt_flow import PromptFlowExperiment
@@ -89,31 +90,27 @@ class ExperimentHandler:
     @staticmethod
     def _get_experiment_dir():
         """Prompt the user to provide a custom directory (relative or absolute) or use the default."""
-        default_dir = "./app/flow/"
-        
-        # Clear message to ask for either relative or absolute directory
-        user_input = input(f"📁 Enter directory for experiment (default: {default_dir}) e.g., \\`./mydir/\\`: ").strip()
+        user_input = input(f"📁 [Optional] Enter directory for experiment (default: {DEFAULT_EXPERIMENT_DIR}) : ").strip()
 
-        # Use the provided directory or default if none is provided
+        # Use default if no input
         if not user_input:
-            chosen_directory = default_dir
-            print(f"✅ Using default directory: {chosen_directory}")
+            chosen_directory = DEFAULT_EXPERIMENT_DIR
+            print(f" ℹ️ Using default directory: {chosen_directory}")
         else:
             chosen_directory = user_input
 
             # If the input does not start with './', prepend it
             if not os.path.isabs(chosen_directory) and not chosen_directory.startswith('./'):
-                print("ℹ️ Automatically prepending './' to make the path relative.")
                 chosen_directory = f"./{chosen_directory}"
             
             # Automatically append '/' if it doesn't end with '/'
             if not chosen_directory.endswith('/'):
                 chosen_directory = f"{chosen_directory}/"
 
-            print(f"✅ Using custom directory: {chosen_directory}")
+            print(f" ℹ️ Using custom directory: {chosen_directory}")
 
 
-        # Check if the directory exists, if not, create it
+        # Create if does not exist
         if not os.path.exists(chosen_directory):
             os.makedirs(chosen_directory)
             print(f"📁 Created directory: {chosen_directory}")

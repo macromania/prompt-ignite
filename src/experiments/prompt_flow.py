@@ -12,7 +12,7 @@ class PromptFlowExperiment(Experiment):
 
     def create_resources(self, dir: str):
         print("🛠️ Creating the Prompt Flow...")
-        command = f'pf flow init --flow "./{dir}/{self.name}" --type standard'
+        command = f'pf flow init --flow "{dir}{self.name}" --type standard'
         self._run_command(command)
         print("✅ Prompt Flow created!")
 

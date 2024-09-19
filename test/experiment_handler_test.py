@@ -2,6 +2,7 @@ import os
 import subprocess
 from unittest.mock import MagicMock, mock_open, patch
 
+from src.config import DEFAULT_EXPERIMENT_DIR
 from src.experiment_handler import ExperimentHandler
 from src.experiments.prompt_flow import PromptFlowExperiment
 
@@ -63,7 +64,7 @@ class TestExperimentHandler:
         
         result = experiment._get_experiment_dir()
         
-        expected_directory = "./app/flow/"
+        expected_directory = DEFAULT_EXPERIMENT_DIR
         mock_makedirs.assert_called_once_with(expected_directory)
         assert result == expected_directory
 
@@ -96,6 +97,48 @@ class TestExperimentHandler:
         assert result == expected_directory
 
     @patch.object(ExperimentHandler, '_run_command')
+    @patch('builtins.input', return_value='mydir/')  # Simulate user input with './' but without '/'
+    @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
+    @patch('os.makedirs')
+    def test_get_experiment_dir_custom_relative_without_preceding_dot_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+        experiment = ExperimentHandler()
+
+        
+        result = experiment._get_experiment_dir()
+        
+        expected_directory = "./mydir/"
+        mock_makedirs.assert_called_once_with(expected_directory)
+        assert result == expected_directory
+    
+    @patch.object(ExperimentHandler, '_run_command')
+    @patch('builtins.input', return_value='./mydir')  # Simulate user input with './' but without '/'
+    @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
+    @patch('os.makedirs')
+    def test_get_experiment_dir_custom_relative_without_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+        experiment = ExperimentHandler()
+
+        
+        result = experiment._get_experiment_dir()
+        
+        expected_directory = "./mydir/"
+        mock_makedirs.assert_called_once_with(expected_directory)
+        assert result == expected_directory
+    
+    @patch.object(ExperimentHandler, '_run_command')
+    @patch('builtins.input', return_value='mydir/temp')  # Simulate user input with './' but without '/'
+    @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
+    @patch('os.makedirs')
+    def test_get_experiment_dir_custom_relative_without_preceding_dot_and_slash_and_succeeding_slash(self, mock_makedirs, mock_exists, mock_input, mock_run_command):
+        experiment = ExperimentHandler()
+
+        
+        result = experiment._get_experiment_dir()
+        
+        expected_directory = "./mydir/temp/"
+        mock_makedirs.assert_called_once_with(expected_directory)
+        assert result == expected_directory
+
+    @patch.object(ExperimentHandler, '_run_command')
     @patch('builtins.input', return_value='/absolute/path')  # Simulate absolute path input
     @patch('os.path.exists', return_value=False)  # Simulate directory does not exist
     @patch('os.makedirs')
@@ -112,13 +155,25 @@ class TestExperimentHandler:
     @patch.object(ExperimentHandler, '_read_and_set_env_vars')
     @patch.object(ExperimentHandler, '_run_command')
     @patch('builtins.input', return_value='./existingdir')  # Simulate existing directory
-    @patch('os.path.exists', return_value=True)  # Simulate directory already exists
-    def test_get_experiment_dir_existing_directory(self, mock_exists, mock_input, mock_run_command, mock_read_and_set_env_vars):
+    @patch('os.path.exists', return_value=False)  # Simulate directory already exists
+    @patch('os.makedirs')
+    def test_get_experiment_dir_doesnt_exist_directory(self, mock_mkdir, mock_exists, mock_input, mock_run_command, mock_read_and_set_env_vars):
         experiment = ExperimentHandler()
 
+        experiment._get_experiment_dir()
         
-        result = experiment._get_experiment_dir()
+        mock_mkdir.assert_called_once_with("./existingdir/")
+
+    @patch.object(ExperimentHandler, '_read_and_set_env_vars')
+    @patch.object(ExperimentHandler, '_run_command')
+    @patch('builtins.input', return_value='./existingdir')  # Simulate existing directory
+    @patch('os.path.exists', return_value=True)  # Simulate directory already exists
+    @patch('os.makedirs')
+    def test_get_experiment_dir_exists_directory(self, mock_mkdir, mock_exists, mock_input, mock_run_command, mock_read_and_set_env_vars):
+        experiment = ExperimentHandler()
+
+        experiment._get_experiment_dir()
         
-        expected_directory = "./existingdir/"
-        mock_exists.assert_called_once_with(expected_directory)
-        assert result == expected_directory
+        mock_mkdir.assert_not_called()
+
+
