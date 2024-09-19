@@ -1,8 +1,8 @@
 import os
 import re
 import subprocess
-from enum import Enum
 
+from config import DEFAULT_EXPERIMENT_DIR
 from src.entities import ExperimentType
 from src.experiments.jupytor_notebook import JupyterNotebookExperiment
 from src.experiments.prompt_flow import PromptFlowExperiment
@@ -87,6 +87,38 @@ class ExperimentHandler:
 
         return types[choice]
 
+    @staticmethod
+    def _get_experiment_dir():
+        """Prompt the user to provide a custom directory or use the default."""
+        user_input = input(f"📁 [Optional] Enter directory for experiment (default: {DEFAULT_EXPERIMENT_DIR}) : ").strip()
+
+        # Use default if no input
+        if not user_input:
+            chosen_directory = DEFAULT_EXPERIMENT_DIR
+            print(f" ℹ️ Using default directory: {chosen_directory}")
+        else:
+            chosen_directory = user_input
+
+            # If the input does not start with './', prepend it
+            if not os.path.isabs(chosen_directory) and not chosen_directory.startswith('./'):
+                chosen_directory = f"./{chosen_directory}"
+            
+            # Automatically append '/' if it doesn't end with '/'
+            if not chosen_directory.endswith('/'):
+                chosen_directory = f"{chosen_directory}/"
+
+            print(f" ℹ️ Using custom directory: {chosen_directory}")
+
+
+        # Create if does not exist
+        if not os.path.exists(chosen_directory):
+            os.makedirs(chosen_directory)
+            print(f"📁 Created directory: {chosen_directory}")
+        else:
+            print(f"📁 Directory already exists: {chosen_directory}")
+
+        return chosen_directory
+
     @classmethod
     def create(cls):
         try:
@@ -94,11 +126,12 @@ class ExperimentHandler:
 
             name = cls._get_experiment_name()
             experiment_type = cls._get_experiment_type()
+            dir = cls._get_experiment_dir()
 
             if experiment_type not in cls._experiments:
                 raise ValueError(f"Unsupported experiment type: {experiment_type}")
 
-            experiment = cls._experiments[experiment_type](name)
+            experiment = cls._experiments[experiment_type](name, dir)
             experiment.create()
 
             print("🔥 Experiment setup complete! 🚀")
