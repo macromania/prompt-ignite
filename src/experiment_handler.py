@@ -131,8 +131,8 @@ class ExperimentHandler:
             if experiment_type not in cls._experiments:
                 raise ValueError(f"Unsupported experiment type: {experiment_type}")
 
-            experiment = cls._experiments[experiment_type](name)
-            experiment.create(dir)
+            experiment = cls._experiments[experiment_type](name, dir)
+            experiment.create()
 
             print("🔥 Experiment setup complete! 🚀")
 

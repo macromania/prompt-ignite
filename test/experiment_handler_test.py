@@ -31,13 +31,13 @@ class TestExperimentHandler:
     @patch('src.experiments.prompt_flow.PromptFlowExperiment.create_documentation')
     @patch('src.experiments.prompt_flow.PromptFlowExperiment.create_resources')
     def test_create(self, mock_create_documentation, mock_create_resources):
-        experiment = PromptFlowExperiment("test-experiment")
         dir = "./mydir/"
+        experiment = PromptFlowExperiment("test-experiment", dir)
 
-        experiment.create(dir)
+        experiment.create()
         
-        mock_create_resources.assert_called_once_with(dir)
-        mock_create_documentation.assert_called_once_with(dir)
+        mock_create_resources.assert_called_once_with()
+        mock_create_documentation.assert_called_once_with()
 
     @patch('subprocess.Popen')
     @patch('os.environ', {'VIRTUAL_ENV': '/path/to/venv'})

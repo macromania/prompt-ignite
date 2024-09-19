@@ -3,11 +3,12 @@ from enum import Enum
 
 
 class Experiment(ABC):
-    def __init__(self, name):
+    def __init__(self, name, dir):
         self.name = name
+        self.dir = dir
 
     @abstractmethod
-    def create(self, dir):
+    def create(self):
         pass
 
 class ExperimentType(Enum):
