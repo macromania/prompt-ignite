@@ -11,8 +11,9 @@ class Experiment(ABC):
     def create(self):
         pass
 
+
 class ExperimentType(Enum):
-    PROMPT_FLOW = "Hello Prompt Flow"
-    JUPYTER_NOTEBOOK = "Hello Jupyter Notebook"
-    PROMPTY = "Hello Prompty"
-    PYTHON = "Hello Python"
+    PROMPT_FLOW = "prompt-flow"
+    JUPYTER_NOTEBOOK = "jupyter"
+    PROMPTY = "prompty"
+    PYTHON = "pure-python"

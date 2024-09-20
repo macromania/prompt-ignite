@@ -29,6 +29,8 @@ select = [
     "UP",     # pyupgrade
     "RUF100", # valid noqa annnotations
 ]
+ignore = ["E501"] # 79 chars PEP 8 style is skipped
+
 src = ["src"]
 
 [tool.pyright]
