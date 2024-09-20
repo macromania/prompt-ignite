@@ -4,6 +4,7 @@ from typing import Annotated
 import typer
 
 from src.entities import ExperimentType
+from src.experiment_handler import ExperimentHandler
 
 
 def generate_random_int_from_timestamp():
@@ -39,6 +40,8 @@ def main(name: Annotated[str | None, n_typerOption] = None,
     🔥 Welcome to the Prompt Ignite!
     """
 
+    print("🔥 Welcome to the Prompt Ignite!")
+
     if not name:
         name = typer.prompt(
             "Experiment Name",
@@ -61,7 +64,9 @@ def main(name: Annotated[str | None, n_typerOption] = None,
             "Directory to store the experiment artefacts",
             default=d_dir)
 
-    summary = f"Creating experiment: issue-{issue}-{name} for type: {type.value} in directory: {dir}"
+    conventional_name = f"issue-{issue}-{name}"
+
+    summary = f"Creating experiment: {conventional_name} for type: {type.value} in directory: {dir}"
     print(summary)
 
     create = typer.confirm("Confirm creating the experiment?")
@@ -70,6 +75,14 @@ def main(name: Annotated[str | None, n_typerOption] = None,
         raise typer.Abort()
 
     print("Working...")
+
+    if type is None:
+        raise ValueError("Experiment type is required")
+
+    if dir is None:
+        raise ValueError("Experiment directory is required")
+
+    ExperimentHandler.create(name=conventional_name, type=type, dir=dir)
 
     print("Done!")
 
