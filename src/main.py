@@ -20,43 +20,58 @@ d_type = ExperimentType.PROMPT_FLOW.value
 d_issue = generate_random_int_from_timestamp()
 d_dir = "app/experiments"
 
-name_help = f"Name of the experiment (default: {d_name})"
-issue_help = "Issue number (default: auto-generated)"
-type_help = f"Type of the experiment. (default: {d_type})"
-dir_help = f"Directory to store the experiment (default: {d_dir})"
+n_help = f"Name of the experiment (default: {d_name})"
+i_help = "Issue number (default: auto-generated)"
+t_help = f"Type of the experiment. (default: {d_type})"
+d_help = f"Directory to store the experiment (default: {d_dir})"
+
+n_typerOption = typer.Option(help=n_help, show_default=False)
+i_typerOption = typer.Option(help=i_help, show_default=False)
+t_typerOption = typer.Option(help=t_help, show_default=False)
+d_typerOption = typer.Option(help=d_help, show_default=False)
 
 
-def main(name: Annotated[str | None, typer.Option(help=name_help, show_default=False)] = None,  # noqa: 501
-         issue: Annotated[int | None, typer.Option(help=issue_help, show_default=False)] = None,  # noqa: 501
-         type: Annotated[ExperimentType | None, typer.Option(help=type_help, show_default=False)] = None,  # noqa: 501
-         dir: Annotated[str | None, typer.Option(help=dir_help, show_default=False)] = None):  # noqa: 501
+def main(name: Annotated[str | None, n_typerOption] = None,
+         issue: Annotated[int | None, i_typerOption] = None,
+         type: Annotated[ExperimentType | None, t_typerOption] = None,
+         dir: Annotated[str | None, d_typerOption] = None):
     """
     🔥 Welcome to the Prompt Ignite!
     """
 
     if not name:
         name = typer.prompt(
-            "Enter the name of the experiment:",
+            "Experiment Name",
             default=d_name)
 
     if not issue:
-        issue = typer.prompt("Enter issue number:",
+        issue = typer.prompt("Issue Number",
                              default=d_issue,
                              type=int)
 
     if not type:
         type = typer.prompt(
-            f"Enter the type of the experiment, Choose from: {', '.join([t.value for t in ExperimentType])}",
+            f"Experiment Type: {', '.join([t.value for t in ExperimentType])}",
             default=d_type,
             type=ExperimentType,
             show_choices=True)
 
     if not dir:
         dir = typer.prompt(
-            "Enter the directory to store the experiment:",
+            "Directory to store the experiment artefacts",
             default=d_dir)
-    print(
-        f"Creating experiment: issue-{issue}-{name} for type: {type.value} in directory: {dir}")
+
+    summary = f"Creating experiment: issue-{issue}-{name} for type: {type.value} in directory: {dir}"
+    print(summary)
+
+    create = typer.confirm("Confirm creating the experiment?")
+    if not create:
+        print("Aborting...")
+        raise typer.Abort()
+
+    print("Working...")
+
+    print("Done!")
 
 
 if __name__ == "__main__":
