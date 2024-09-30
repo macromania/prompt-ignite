@@ -173,4 +173,4 @@ __pycache__/
 .runs/
 
 # Local development
-app/flow/
+app/

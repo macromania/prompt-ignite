@@ -30,7 +30,8 @@ class ExperimentHandler:
 
             print("✅ Connected to the virtual environment!")
         else:
-            print(f"✅ Already connected to a virtual environment: {os.environ['VIRTUAL_ENV']}")
+            print(
+                f"✅ Already connected to a virtual environment: {os.environ['VIRTUAL_ENV']}")
 
     def _read_and_set_env_vars(self):
         print("🔍 Reading .env file...")
@@ -57,24 +58,28 @@ class ExperimentHandler:
 
     def _run_command(self, command):
         env = os.environ.copy()
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
         stdout, stderr = process.communicate(timeout=30)
         if process.returncode != 0:
-            raise RuntimeError(f"Error executing experiment command: {command}")
+            raise RuntimeError(
+                f"Error executing experiment command: {command}")
         return process.returncode
 
     @staticmethod
     def _get_experiment_name():
         name = input("🤖 Enter the name of the experiment: ")
         while not re.match(r"^issue-[0-9]+-[a-z0-9-]+$", name):
-            print("🚨 Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
+            print(
+                "🚨 Invalid name. The name should be in the format 'issue-{number}-{name}', i.e. issue-123-name, issue-456-name-123")
             name = input("🤖 Enter the name of the experiment: ")
         return name
 
     @staticmethod
     def _get_experiment_type():
         """Prompts the user to choose a type for the experiment."""
-        types = {"1": ExperimentType.PROMPT_FLOW, "2": ExperimentType.JUPYTER_NOTEBOOK, "3": ExperimentType.PROMPTY, "4": ExperimentType.PYTHON}
+        types = {"1": ExperimentType.PROMPT_FLOW, "2": ExperimentType.JUPYTER_NOTEBOOK,
+                 "3": ExperimentType.PROMPTY, "4": ExperimentType.PYTHON}
 
         print("🔍 Choose a type for the experiment:")
         for key, value in types.items():
@@ -82,7 +87,8 @@ class ExperimentHandler:
 
         choice = input("🔢 Enter the number of your choice: ")
         while choice not in types:
-            print("🚨 Invalid choice. Please enter a number corresponding to one of the options.")
+            print(
+                "🚨 Invalid choice. Please enter a number corresponding to one of the options.")
             choice = input("🔢 Enter the number of your choice: ")
 
         return types[choice]
@@ -90,7 +96,8 @@ class ExperimentHandler:
     @staticmethod
     def _get_experiment_dir():
         """Prompt the user to provide a custom directory or use the default."""
-        user_input = input(f"📁 [Optional] Enter directory for experiment (default: {DEFAULT_EXPERIMENT_DIR}) : ").strip()
+        user_input = input(
+            f"📁 [Optional] Enter directory for experiment (default: {DEFAULT_EXPERIMENT_DIR}) : ").strip()
 
         # Use default if no input
         if not user_input:
@@ -102,13 +109,12 @@ class ExperimentHandler:
             # If the input does not start with './', prepend it
             if not os.path.isabs(chosen_directory) and not chosen_directory.startswith('./'):
                 chosen_directory = f"./{chosen_directory}"
-            
+
             # Automatically append '/' if it doesn't end with '/'
             if not chosen_directory.endswith('/'):
                 chosen_directory = f"{chosen_directory}/"
 
             print(f" ℹ️ Using custom directory: {chosen_directory}")
-
 
         # Create if does not exist
         if not os.path.exists(chosen_directory):
@@ -120,18 +126,9 @@ class ExperimentHandler:
         return chosen_directory
 
     @classmethod
-    def create(cls):
+    def create(cls, name: str, type: ExperimentType, dir: str):
         try:
-            print("🔥 Welcome to the Prompt Ignite!")
-
-            name = cls._get_experiment_name()
-            experiment_type = cls._get_experiment_type()
-            dir = cls._get_experiment_dir()
-
-            if experiment_type not in cls._experiments:
-                raise ValueError(f"Unsupported experiment type: {experiment_type}")
-
-            experiment = cls._experiments[experiment_type](name, dir)
+            experiment = cls._experiments[type](name, dir)
             experiment.create()
 
             print("🔥 Experiment setup complete! 🚀")
@@ -144,5 +141,5 @@ class ExperimentHandler:
             return
 
 
-if __name__ == "__main__":
-    ExperimentHandler.create()
+# if __name__ == "__main__":
+#     ExperimentHandler.create()
