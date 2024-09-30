@@ -19,3 +19,6 @@ run: ## 🚀 Run the application
 
 run-help: ## 🚀 Run the application with help
 	@sh ./scripts/run-help.sh
+
+new-experiment: ## 🧪 Create a new experiment
+	@python src/main.py

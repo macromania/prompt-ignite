@@ -19,7 +19,7 @@ def generate_random_int_from_timestamp():
 d_name = "experiment"
 d_type = ExperimentType.PROMPT_FLOW.value
 d_issue = generate_random_int_from_timestamp()
-d_dir = "app/experiments"
+d_dir = "app/experiments/"
 
 n_help = f"Name of the experiment (default: {d_name})"
 i_help = "Issue number (default: auto-generated)"
